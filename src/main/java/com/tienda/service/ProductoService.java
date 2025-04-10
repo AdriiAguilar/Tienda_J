@@ -1,8 +1,12 @@
 package com.tienda.service; 
+
 import com.tienda.domain.Producto; 
 import java.util.List; 
+
 public interface ProductoService { 
+    
  public List<Producto> getProductos(boolean activo); 
+ 
  // Se obtiene un Producto, a partir del id de un producto 
  public Producto getProducto(Producto producto); 
  
@@ -12,6 +16,7 @@ public interface ProductoService {
  
  // Se elimina el producto que tiene el id pasado por parámetro 
  public void delete(Producto producto); 
+ 
  public List<Producto> findByPrecioBetweenOrderByDescripcion(double 
 precioInf, double precioSup); 
 } 

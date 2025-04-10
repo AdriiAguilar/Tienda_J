@@ -1,47 +1,41 @@
-package com.tienda.service.Impl; 
-import com.tienda.dao.ProductoDao; 
-import com.tienda.domain.Producto; 
-import com.tienda.service.ProductoService; 
-import java.util.List; 
-import org.springframework.beans.factory.annotation.Autowired; 
-import org.springframework.stereotype.Service; 
-import org.springframework.transaction.annotation.Transactional; 
-@Service 
-public class ProductoServiceImpl implements ProductoService { 
- @Autowired 
- private ProductoDao productoDao; 
- @Override 
- @Transactional(readOnly = true) 
- public List<Producto> getProductos(boolean activos) { 
- var lista = productoDao.findAll(); 
- if (activos) { 
- lista.removeIf(e -> !e.isActivo()); 
- } 
- return lista; 
- } 
- @Override 
- @Transactional(readOnly = true) 
- public Producto getProducto(Producto producto) { 
- return productoDao.findById(producto.getIdProducto()).orElse(null); 
- } 
- @Override 
- @Transactional 
- public void save(Producto producto) { 
- productoDao.save(producto); 
- } 
- @Override 
- @Transactional 
- public void delete(Producto producto) { 
- productoDao.delete(producto); 
- } 
- 
- // Lista de productos con precio entre ordendados por descripción 
-ConsultaAmpliada 
- @Override 
- @Transactional(readOnly=true) 
- public List<Producto> findByPrecioBetweenOrderByDescripcion(double 
-precioInf, double precioSup) { 
- return productoDao.findByPrecioBetweenOrderByDescripcion(precioInf, 
-precioSup); 
-} 
-} 
+package com.tienda.controller;
+
+import com.tienda.domain.Categoria;
+import com.tienda.service.CategoriaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.tienda.service.ProductoService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+@RequestMapping("/pruebas")
+public class PruebasController {
+
+    @Autowired
+    private ProductoService productoService;
+    @Autowired
+    private CategoriaService categoriaService;
+
+    @GetMapping("/listado")
+    public String listado(Model model) {
+        var productos = productoService.getProductos(false);
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        model.addAttribute("categorias", categorias);
+        return "/pruebas/listado";
+    }
+
+    @GetMapping("/listado/{idCategoria}")
+    public String listado(Model model, Categoria categoria) {
+        var productos = categoriaService.getCategoria(categoria).getProductos();
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        model.addAttribute("categorias", categorias);
+        return "/pruebas/listado";
+    }

@@ -1,4 +1,5 @@
 package com.tienda.service.Impl; 
+
 import com.tienda.dao.ProductoDao; 
 import com.tienda.domain.Producto; 
 import com.tienda.service.ProductoService; 
@@ -6,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.stereotype.Service; 
 import org.springframework.transaction.annotation.Transactional; 
+
 @Service 
 public class ProductoServiceImpl implements ProductoService { 
  @Autowired 
@@ -43,5 +45,4 @@ ConsultaAmpliada
 precioInf, double precioSup) { 
  return productoDao.findByPrecioBetweenOrderByDescripcion(precioInf, 
 precioSup); 
-} 
-} 
+}  
