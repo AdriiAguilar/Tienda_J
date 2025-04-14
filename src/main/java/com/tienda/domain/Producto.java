@@ -34,3 +34,4 @@ public class Producto implements Serializable {
         this.descripcion = descripcion;
         this.activo = activo;
     }
+    }
